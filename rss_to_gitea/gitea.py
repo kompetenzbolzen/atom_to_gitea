@@ -33,12 +33,12 @@ class GiteaAPI:
         return result.json()
 
 
-    def createIssue(self, owner, repo, title, content):
+    def createIssue(self, _owner, _repo, _title, _content):
         pass
 
-    def searchIssue(self, _owner, _repo, _title, _labels):
+    def searchIssue(self, _owner, _repo, _title, _labels, _state='open'):
         data= {
-            'state':'open',
+            'state':_state,
             'labels':_labels,
             'created_by':self.username,
             'q':_title
@@ -49,6 +49,6 @@ class GiteaAPI:
         for issue in result:
             print(issue['title'])
 
-    def updateIssue(self, owner, repo, issueid):
+    def updateIssue(self, _owner, _repo, _issueid):
         pass
 
