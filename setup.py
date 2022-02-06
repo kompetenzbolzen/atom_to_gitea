@@ -11,7 +11,8 @@ setup(
         'console_scripts': ['rsstogitea=rss_to_gitea.main:main']
         },
     install_requires=[
-        "requests>=2.25.1"
+        "requests>=2.25.1",
+        "pyyaml"
     ],
     license='All rights reserved',
     long_description=open('README.md').read(),
