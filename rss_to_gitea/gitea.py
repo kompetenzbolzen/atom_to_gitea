@@ -32,11 +32,30 @@ class GiteaAPI:
 
         return result.json()
 
+    def _api_post(self, _endpoint, _data):
+        headers={
+                'Authorization':f'token {self.token}',
+                'Content-Type': 'application/json',
+                'accept': 'application/json'
+            }
+        result = requests.post(f'{self.address}/{_endpoint}',headers=headers, json=_data)
 
-    def createIssue(self, _owner, _repo, _title, _content):
-        pass
+        return result.json()
 
-    def searchIssue(self, _owner, _repo, _title, _labels, _state='open'):
+
+    def createIssue(self, _owner, _repo, _title, _content, _assign, _labels):
+        data={
+            'assignee':_assign,
+#            'body':_content,
+            'labels':_labels,
+            'title':_title
+        }
+
+        result = self._api_post(f'repos/{_owner}/{_repo}/issues', data )
+
+        return result
+
+    def searchIssue(self, _owner, _repo, _title, _labels, _state='all'):
         data= {
             'state':_state,
             'labels':_labels,
@@ -47,8 +66,23 @@ class GiteaAPI:
         result = self._api_get(f'repos/{_owner}/{_repo}/issues', data )
 
         for issue in result:
-            print(issue['title'])
+            if issue['title'] == _title:
+                return issue
 
-    def updateIssue(self, _owner, _repo, _issueid):
-        pass
+        return None
+
+    def getLabelId(self, _owner, _repo, _label):
+        data= {}
+
+        result = self._api_get(f'repos/{_owner}/{_repo}/labels', data )
+
+        label_filtered = filter(lambda a: a['name']==_label, result)
+        label = list(label_filtered)
+
+        if len(label) != 1:
+            print('No or more than one label found')
+            return None
+
+        return label[0]['id']
+
 
