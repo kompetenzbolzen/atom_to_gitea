@@ -16,10 +16,17 @@ USAGE:
 
 def main():
     if len(sys.argv) <= 1:
+        print_help()
         return 1
 
     config = Config(sys.argv[1])
-    api = GiteaAPI("https://gitea.my.cum.re", config.token)
+
+    token = config.token
+    if str.startswith(token, 'env/'):
+        splt = token.split('/',1)
+        token = os.environ[splt[1]]
+
+    api = GiteaAPI(config.url, token)
 
     label_id = api.getLabelId(config.owner, config.repo, config.label)
 
@@ -35,4 +42,6 @@ def main():
             print(f'{issue_title} already exists. Skipping')
             continue
 
-        result = api.createIssue(config.owner, config.repo, issue_title, '', feed['assign'], [label_id])
+        print(feed)
+
+        result = api.createIssue(config.owner, config.repo, issue_title, latest['link'], feed['assign'], [label_id])

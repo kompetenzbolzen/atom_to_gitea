@@ -94,7 +94,7 @@ class Config:
     def load(self, _dict):
         self.config = _dict
 
-    def __getattr__(self, _attr) -> float | int | Config | None:
+    def __getattr__(self, _attr) -> str | Config | None:
         if _attr not in self.config:
             return None
 

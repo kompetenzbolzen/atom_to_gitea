@@ -46,7 +46,7 @@ class GiteaAPI:
     def createIssue(self, _owner, _repo, _title, _content, _assign, _labels):
         data={
             'assignee':_assign,
-#            'body':_content,
+            'body':_content,
             'labels':_labels,
             'title':_title
         }

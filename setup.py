@@ -3,7 +3,7 @@ import setuptools
 
 setup(
     name='rsstogitea',
-    version='0.0.0-dev',
+    version='0.1.0',
     author="Jonas Gunz",
     description="Create a Gitea Issue for new RSS entries",
     packages=['rss_to_gitea'],
@@ -15,7 +15,7 @@ setup(
         "pyyaml"
     ],
     license='All rights reserved',
-    long_description=open('README.md').read(),
+    long_description=open('Readme.md').read(),
     long_description_content_type="text/markdown",
     classifiers=[
         "Programming Language :: Python :: 3",
