@@ -14,11 +14,12 @@ setup(
         "requests>=2.25.1",
         "pyyaml"
     ],
-    license='All rights reserved',
+    license='MIT',
     long_description=open('Readme.md').read(),
     long_description_content_type="text/markdown",
     classifiers=[
         "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
 )
