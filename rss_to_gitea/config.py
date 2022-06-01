@@ -27,6 +27,16 @@ STRUCTURE_DICT_LIST={
         }
 }
 
+DEFAULTS_DICT_LIST={
+        'feeds': {
+            'url':None,
+            'name':None,
+            'assign':None,
+            'exclude': [],
+            'include': []
+        }
+}
+
 
 
 class ConfigError(Exception):
@@ -61,6 +71,7 @@ class Config:
         with open(_file, 'r') as f:
             self.config = yaml.load(f.read(), Loader=yaml.FullLoader)
 
+        self._populate_defaults()
         self._validate()
 
     def __iter__(self):
@@ -83,6 +94,14 @@ class Config:
                     pass
             elif type(_dict[e]) is not _spec[e]:
                 raise ConfigError(f'{_context}Key {e} is {type(_dict[e])}. Should be {_spec[e]}')
+
+    def _populate_defaults(self):
+        # this is a holy mess. It works. And at time of writing made sense.
+        for lst in DEFAULTS_DICT_LIST:
+            for entry in range(len(self.config[lst])):
+                for default in DEFAULTS_DICT_LIST[lst]:
+                    if not default in self.config[lst][entry]:
+                        self.config[lst][entry][default] = DEFAULTS_DICT_LIST[lst][default]
 
     def _validate(self):
         Config._validate_dict(self.config, STRUCTURE)
