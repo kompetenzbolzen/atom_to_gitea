@@ -42,6 +42,16 @@ class GiteaAPI:
 
         return result.json()
 
+    def _api_patch(self, _endpoint, _data):
+        headers={
+                'Authorization':f'token {self.token}',
+                'Content-Type': 'application/json',
+                'accept': 'application/json'
+            }
+        result = requests.patch(f'{self.address}/{_endpoint}',headers=headers, json=_data)
+
+        return result.json()
+
 
     def createIssue(self, _owner, _repo, _title, _content, _assign, _labels):
         data={
@@ -55,7 +65,15 @@ class GiteaAPI:
 
         return result
 
-    def searchIssue(self, _owner, _repo, _title, _labels, _state='all'):
+    def changeIssueState(self, _owner, _repo, _index, _state):
+        data= {
+            'state':_state,
+        }
+
+        result = self._api_patch(f'repos/{_owner}/{_repo}/issues/{_index}', data )
+
+
+    def getFirstExactIssue(self, _owner, _repo, _title, _labels, _state='all'):
         data= {
             'state':_state,
             'labels':_labels,
@@ -70,6 +88,24 @@ class GiteaAPI:
                 return issue
 
         return None
+
+    def getAllIssuesStartingWith(self, _owner, _repo, _title, _labels, _state='all'):
+        ret = []
+
+        data= {
+            'state':_state,
+            'labels':_labels,
+            'created_by':self.username,
+            'q':_title
+        }
+
+        result = self._api_get(f'repos/{_owner}/{_repo}/issues', data )
+
+        for issue in result:
+            if issue['title'].startswith(_title):
+                ret.append(issue)
+
+        return ret
 
     def getLabelId(self, _owner, _repo, _label):
         data= {}

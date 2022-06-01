@@ -37,11 +37,15 @@ def main():
         issue_title = f'{feed["name"]}: {latest["title"]}'
         print("Title=", issue_title)
 
-        ticket = api.searchIssue(config.owner, config.repo, issue_title, [config.label])
+        ticket = api.getFirstExactIssue(config.owner, config.repo, issue_title, [config.label])
         if ticket is not None:
             print(f'{issue_title} already exists. Skipping')
             continue
 
-        print(feed)
+        # should we maybe just rename here?
+        prev_versions = api.getAllIssuesStartingWith(config.owner, config.repo, f'{feed["name"]}: ', [config.label], _state='open')
+        for prev in prev_versions:
+            print(f'{prev["title"]} (#{prev["number"]}) already exists. closing.')
+            api.changeIssueState(config.owner, config.repo, prev['number'], 'closed')
 
         result = api.createIssue(config.owner, config.repo, issue_title, latest['link'], feed['assign'], [label_id])
