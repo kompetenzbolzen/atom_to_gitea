@@ -23,6 +23,8 @@ rsstogitea config.yml
 	* **exclude** List. If name of item contains one or more, item is ignored. Not Regex.
 	* **include** List. Item is ignored if title does not contain all strings. Not Regex.
 
+include and exclude can be ommited.
+
 ### Example
 
 ```yaml
@@ -39,5 +41,4 @@ feeds:
     exclude:
       - dev
       - rc
-    include: []
 ```
